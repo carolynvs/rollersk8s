@@ -1,4 +1,5 @@
 #!/bin/sh
+set -eou pipefail
 
 TYPE=$1
 if [ "$TYPE" == "" ]; then
@@ -21,4 +22,45 @@ apt-get install -y docker-engine
 # Install kubernetes
 apt-get install -y kubelet kubeadm kubernetes-cni kubectl
 
-echo "finished Kubernetes configuration! 🎉"
+if [[ "$TYPE" == "master" ]]; then
+
+  ##
+  ## Master Setup
+  ##
+
+  # Automatically load the cluster credentials into kubectl
+  cat <<EOF >>/root/.bashrc
+export KUBECONFIG=/etc/kubernetes/admin.conf
+EOF
+
+  # Download flannel configuration
+  mkdir -p /root/manifests
+  cd /root/manifests
+  curl -sLO https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+  curl -sLO https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel-rbac.yml
+
+  # Install etcdctl so you can do backups later
+  cd /root
+  wget https://github.com/coreos/etcd/releases/download/v3.0.0/etcd-v3.0.0-linux-amd64.tar.gz
+  tar -xzf etcd-v3.0.0-linux-amd64.tar.gz
+  mv etcd-v3.0.0-linux-amd64/etcdctl /usr/bin/
+
+  # Download the finalize script
+  curl -O tftp://raspberrypi/k8s-finalize-master.sh
+
+  echo "after rebooting, run the following command to create the cluster:"
+  printf "\tbash k8s-finalize-master.sh\n"
+
+else
+
+  ##
+  ## Node Setup
+  ##
+
+  # Download the finalize script
+  cd /root
+  curl -O tftp://raspberrypi/k8s-finalize-node.sh
+  echo "after rebooting, run the following command to join the cluster:"
+  printf "\tbash k8s-finalize-node.sh\n"
+
+fi

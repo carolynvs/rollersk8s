@@ -1,2 +1,2 @@
 preseed-user.cfg
-authorized_keys
+post-install.sh
