@@ -1,2 +1,4 @@
-# rollersk8s
-Run your pony cluster on roller sk8s!
+# ROLLERSK8S
+The official guide to creating your own pony cluster
+
+![ponies on roller skates](images/mlp-derby.png)
