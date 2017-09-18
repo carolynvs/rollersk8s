@@ -1,0 +1,28 @@
+---
+---
+
+@import "{{ site.theme }}";
+
+.page-header {
+  background-color: #c7c8cb;
+  background-image: url({{"images/mlp-derby.png"|relative_url}});
+  background-size: cover;
+}
+
+.page-header .project-name {
+  color: white;
+  font-weight: bold;
+  font-size: 3.5em;
+}
+
+.page-header .project-tagline {
+  color: white;
+  font-size: 2.5em;
+  font-weight: bold;
+  opacity: 100;
+}
+
+.page-header .btn {
+    background-color: #5A68BE;
+    color: white;
+}

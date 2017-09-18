@@ -1,2 +1,3 @@
+.DS_Store
 preseed-user.cfg
 post-install.sh
