@@ -1,4 +1,5 @@
-Rollersk8s helps you build out a local bare-metal Kubernetes cluster. Use it to pxe boot an unformatted machine, either creating a new cluster and making it the master,
+Rollersk8s helps you build out a local bare-metal Kubernetes cluster.
+Use it to pxe boot an unformatted machine, either creating a new cluster and making it the master,
 or setting up a node and joining it to your existing cluster.
 
 ## OMG PONIES
