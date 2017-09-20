@@ -23,5 +23,5 @@ echo "allowing workloads to run on master..."
 kubectl taint node `hostname` node-role.kubernetes.io/master-
 
 TOKEN=`kubeadm token list | sed -n 2p | cut -d" " -f1`
-echo "new cluster setup complete, your secret cluster token is:"
+printf "new cluster setup complete, your secret cluster token is:\n\n"
 printf "\t$TOKEN\n"

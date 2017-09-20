@@ -13,10 +13,10 @@ The official guide to creating your own pony cluster
 
 # Backup etcd
 ```
-mkdir -p /tmp/deathstar/Backups/mlp/etcd/2017.09.19
+mkdir -p /tmp/deathstar/Backups/mlp/etcd/2017.09.20
 etcdctl backup \
       --data-dir /var/lib/etcd/ \
-      --backup-dir /tmp/deathstar/Backups/mlp/etcd/2017.09.19
+      --backup-dir /tmp/deathstar/Backups/mlp/etcd/2017.09.20
 mkdir -p /deathstar/Backups/mlp/etcd/
-mv /tmp/deathstar/Backups/mlp/etcd/2017.09.19 /deathstar/Backups/mlp/etcd/
+mv /tmp/deathstar/Backups/mlp/etcd/2017.09.20 /deathstar/Backups/mlp/etcd/
 ```
