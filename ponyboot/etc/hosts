@@ -11,6 +11,8 @@ ff02::2		ip6-allrouters
 # can always be resolved.
 192.168.0.2   raspberrypi
 192.168.0.3   crossroads
+192.168.0.103	deathstar
+192.168.0.111	printer
 
 192.168.0.116	rainbowdash
 192.168.0.117	fluttershy
