@@ -37,7 +37,6 @@ EOF
   mkdir -p /root/manifests
   cd /root/manifests
   curl -sLO https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
-  curl -sLO https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel-rbac.yml
 
   # Install etcdctl so you can do backups later
   cd /root
