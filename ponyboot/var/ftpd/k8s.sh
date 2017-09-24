@@ -37,11 +37,10 @@ EOF
   mkdir -p /root/manifests
   cd /root/manifests
   curl -sLO https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
-  curl -sLO https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel-rbac.yml
 
   # Install etcdctl so you can do backups later
   cd /root
-  wget https://github.com/coreos/etcd/releases/download/v3.0.0/etcd-v3.0.0-linux-amd64.tar.gz
+  curl -sLO https://github.com/coreos/etcd/releases/download/v3.0.0/etcd-v3.0.0-linux-amd64.tar.gz
   tar -xzf etcd-v3.0.0-linux-amd64.tar.gz
   mv etcd-v3.0.0-linux-amd64/etcdctl /usr/bin/
 

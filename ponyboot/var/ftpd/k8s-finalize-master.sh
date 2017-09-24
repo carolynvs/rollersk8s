@@ -15,7 +15,6 @@ kubectl get node/`hostname`
 
 # Configure the cluster network to use flannel
 echo "enabling flannel..."
-kubectl apply -f /root/manifests/kube-flannel-rbac.yml
 kubectl apply -f /root/manifests/kube-flannel.yml
 
 # Allow workloads to run on the master by removing the master taint
