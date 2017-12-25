@@ -1,8 +1,6 @@
 # ROLLERSK8S
 The official guide to creating your own pony cluster
 
-![ponies on roller skates](images/mlp-derby.png)
-
 # Useful commands
 * Find the master nodes: `kubectl get nodes -l node-role.kubernetes.io/master=`
 * Drain a node: `kubectl drain <NODE>`
