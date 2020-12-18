@@ -1,9 +1,12 @@
 #!/bin/sh
 set -eou pipefail
 
+K8S_VERSION="1.20.1-00"
+ETCD_VERSION="3.4.14"
+
 TYPE=$1
 if [ "$TYPE" == "" ]; then
-  echo "usage: k8s.sh master|node"
+  echo "usage: k8s.sh leader|follower"
   exit 1
 fi
 
@@ -20,12 +23,12 @@ apt-get update
 apt-get install -y docker-engine
 
 # Install kubernetes
-apt-get install -y kubelet kubeadm kubernetes-cni kubectl
+apt-get install -y kubelet=$K8S_VERSION kubeadm=$K8S_VERSION kubectl=$K8S_VERSION
 
-if [[ "$TYPE" == "master" ]]; then
+if [[ "$TYPE" == "leader" ]]; then
 
   ##
-  ## Master Setup
+  ## Leader Setup
   ##
 
   # Automatically load the cluster credentials into kubectl
@@ -40,26 +43,26 @@ EOF
 
   # Install etcdctl so you can do backups later
   cd /root
-  curl -sLO https://github.com/coreos/etcd/releases/download/v3.0.0/etcd-v3.0.0-linux-amd64.tar.gz
-  tar -xzf etcd-v3.0.0-linux-amd64.tar.gz
-  mv etcd-v3.0.0-linux-amd64/etcdctl /usr/bin/
+  curl -sLO https://github.com/coreos/etcd/releases/download/v3.0.0/etcd-v$ETCD_VERSION-linux-amd64.tar.gz
+  tar -xzf etcd-v$ETCD_VERSION-linux-amd64.tar.gz
+  mv etcd-v$ETCD_VERSION-linux-amd64/etcdctl /usr/bin/
 
   # Download the finalize script
-  curl -O tftp://raspberrypi/k8s-finalize-master.sh
+  curl -O tftp://raspberrypi/k8s-finalize-leader.sh
 
   echo "after rebooting, run the following command to create the cluster:"
-  printf "\tbash k8s-finalize-master.sh\n"
+  printf "\tbash k8s-finalize-leader.sh\n"
 
 else
 
   ##
-  ## Node Setup
+  ## Follower Setup
   ##
 
   # Download the finalize script
   cd /root
-  curl -O tftp://raspberrypi/k8s-finalize-node.sh
+  curl -O tftp://raspberrypi/k8s-finalize-follower.sh
   echo "after rebooting, run the following command to join the cluster:"
-  printf "\tbash k8s-finalize-node.sh\n"
+  printf "\tbash k8s-finalize-follower.sh\n"
 
 fi

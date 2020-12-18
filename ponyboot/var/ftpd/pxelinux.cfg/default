@@ -1,1 +1,11 @@
-k8s.cfg
+# D-I config version 2.0
+# search path for the c32 support libraries (libcom32, libutil etc.)
+PATH debian-installer/amd64/boot-screens/
+UI vesamenu.c32
+
+DEFAULT local
+TIMEOUT 0
+
+LABEL local
+    MENU LABEL Boot local hard drive
+    LOCALBOOT 0
