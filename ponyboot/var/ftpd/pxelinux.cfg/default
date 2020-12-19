@@ -4,8 +4,9 @@ PATH debian-installer/amd64/boot-screens/
 UI vesamenu.c32
 
 DEFAULT local
-TIMEOUT 0
+TIMEOUT 5 
 
 LABEL local
     MENU LABEL Boot local hard drive
     LOCALBOOT 0
+

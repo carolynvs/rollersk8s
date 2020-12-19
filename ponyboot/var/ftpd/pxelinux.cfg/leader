@@ -3,7 +3,7 @@
 PATH debian-installer/amd64/boot-screens/
 UI vesamenu.c32
 
-DEFAULT reimage
+DEFAULT local 
 TIMEOUT 0
 
 LABEL reimage
