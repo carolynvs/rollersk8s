@@ -2,6 +2,8 @@
 set -eou pipefail
 
 K8S_VERSION="1.20.1-00"
+DOCKER_VERSION="5:20.10.1~3-0"
+CONTAINERD_VERSION="1.4.3-1"
 ETCD_VERSION="3.4.14"
 
 TYPE=$1
@@ -12,15 +14,24 @@ fi
 
 echo "configuring as a Kubernetes $TYPE"
 
+# Add the Docker repository
+curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
+cat <<EOF >/etc/apt/sources.list.d/docker.list
+deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable
+EOF
+
 # Add the kubernetes repository
 curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
 cat <<EOF >/etc/apt/sources.list.d/kubernetes.list
 deb http://apt.kubernetes.io/ kubernetes-xenial main
 EOF
+
+
+# Refresh apt cache
 apt-get update
 
 # Install Docker
-apt-get install -y docker-engine
+apt-get install -y docker-ce=$DOCKER_VERSION docker-ce-cli=$DOCKER_VERSION containerd.io=$CONTAINERD_VERSION
 
 # Install kubernetes
 apt-get install -y kubelet=$K8S_VERSION kubeadm=$K8S_VERSION kubectl=$K8S_VERSION
