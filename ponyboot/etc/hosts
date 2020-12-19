@@ -9,9 +9,10 @@ ff02::2		ip6-allrouters
 #CVS: dnsmasq by default responds to DNS queries using the hostnames of any devices using DHCP.
 # I am also setting some key hosts here so that nodes that don't set their hostname consistently
 # can always be resolved.
-192.168.0.2   raspberrypi
-192.168.0.3   crossroads
+192.168.0.2	raspberrypi
+192.168.0.3	crossroads
 192.168.0.103	deathstar
+192.158.0.104	deathstar2
 192.168.0.111	printer
 
 192.168.0.116	rainbowdash
@@ -19,3 +20,4 @@ ff02::2		ip6-allrouters
 192.168.0.118	twilightsparkle ponyshare
 192.168.0.119	applejack
 192.168.0.120	pinkiepie
+

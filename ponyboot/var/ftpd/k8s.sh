@@ -43,7 +43,7 @@ EOF
 
   # Install etcdctl so you can do backups later
   cd /root
-  curl -sLO https://github.com/coreos/etcd/releases/download/v3.0.0/etcd-v$ETCD_VERSION-linux-amd64.tar.gz
+  curl -sLO https://github.com/coreos/etcd/releases/download/v$ETCD_VERSION/etcd-v$ETCD_VERSION-linux-amd64.tar.gz
   tar -xzf etcd-v$ETCD_VERSION-linux-amd64.tar.gz
   mv etcd-v$ETCD_VERSION-linux-amd64/etcdctl /usr/bin/
 
