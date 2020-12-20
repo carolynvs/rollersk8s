@@ -52,6 +52,9 @@ systemctl enable docker
 # Install kubernetes
 apt-get install -y kubelet=$K8S_VERSION kubeadm=$K8S_VERSION kubectl=$K8S_VERSION
 
+# Prefetch the k8s images we need to run kubeadm
+kubeadm config images pull
+
 if [[ "$TYPE" == "leader" ]]; then
 
   ##
