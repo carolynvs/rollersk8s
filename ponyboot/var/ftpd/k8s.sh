@@ -2,7 +2,6 @@
 set -eou pipefail
 
 K8S_VERSION="1.20.1-00"
-DOCKER_VERSION="5:20.10.1~3-0~debian-buster"
 CONTAINERD_VERSION="1.4.3-1"
 ETCD_VERSION="3.4.14"
 
@@ -26,12 +25,26 @@ cat <<EOF >/etc/apt/sources.list.d/kubernetes.list
 deb http://apt.kubernetes.io/ kubernetes-xenial main
 EOF
 
-
 # Refresh apt cache
 apt-get update
 
-# Install Docker
-apt-get install -y docker-ce=$DOCKER_VERSION docker-ce-cli=$DOCKER_VERSION containerd.io=$CONTAINERD_VERSION
+# Install containerd as the kubernetes runtime
+apt-get install -y containerd.io=$CONTAINERD_VERSION
+cat <<EOF >> /etc/modules-load.d/containerd.conf
+overlay
+br_netfilter
+EOF
+modprobe overlay
+modprobe br_netfilter
+cat <<EOF >> /etc/sysctl.d/99-kubernetes-cri.conf
+net.bridge.bridge-nf-call-iptables  = 1
+net.ipv4.ip_forward                 = 1
+net.bridge.bridge-nf-call-ip6tables = 1
+EOF
+sysctl --system
+mkdir -p /etc/containerd
+containerd config default >> /etc/containerd/config.toml
+systemctl restart containerd
 
 # Install kubernetes
 apt-get install -y kubelet=$K8S_VERSION kubeadm=$K8S_VERSION kubectl=$K8S_VERSION
