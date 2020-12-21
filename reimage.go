@@ -2,7 +2,9 @@ package main
 
 import (
 	"os"
+	"os/user"
 	"path/filepath"
+	"strconv"
 
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
@@ -57,7 +59,21 @@ func reimage(name string, complete bool) error {
 	if node.Leader {
 		role = "leader"
 	}
-	roleFile := filepath.Join(pxeDir, role)
-	err := os.Symlink(roleFile, node.MACAddress)
-	return errors.Wrapf(err, "Could not create pxe config file %s pointing to %s", node.MACAddress, role)
+	err := os.Symlink(role, pxeFile)
+	if err != nil {
+		return errors.Wrapf(err, "could not create pxe config file %s pointing to %s", pxeFile, role)
+	}
+
+	u, err := user.Lookup("dnsmasq")
+	if err != nil {
+		return errors.Wrapf(err, "could not get uid for dnsmasq")
+	}
+	uid, _ := strconv.Atoi(u.Uid)
+	g, err := user.LookupGroup("root")
+	if err != nil {
+		return errors.Wrapf(err, "could not get gid for root")
+	}
+	gid, _ := strconv.Atoi(g.Gid)
+	err = os.Chown(pxeFile, uid, gid)
+	return errors.Wrap(err, "could not make dnsmasq own the pxe config file")
 }
