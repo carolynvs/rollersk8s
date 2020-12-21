@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 	"os/user"
 	"path/filepath"
@@ -13,6 +14,13 @@ import (
 type Node struct {
 	MACAddress string
 	Leader     bool
+}
+
+func (n Node) Role() string {
+	if n.Leader {
+		return "leader"
+	}
+	return "follower"
 }
 
 var nodes = map[string]Node{
@@ -53,13 +61,11 @@ func reimage(name string, complete bool) error {
 	}
 
 	if complete {
+		fmt.Println("removed pxe config for", name)
 		return nil
 	}
 
-	role := "follower"
-	if node.Leader {
-		role = "leader"
-	}
+	role := node.Role()
 	err = os.Symlink(role, pxeFile)
 	if err != nil {
 		return errors.Wrapf(err, "could not create pxe config file %s pointing to %s", pxeFile, role)
@@ -69,12 +75,16 @@ func reimage(name string, complete bool) error {
 	if err != nil {
 		return errors.Wrapf(err, "could not get uid for dnsmasq")
 	}
-	uid, _ := strconv.Atoi(u.Uid)
-	g, err := user.LookupGroup("root")
+	uid, err := strconv.Atoi(u.Uid)
 	if err != nil {
-		return errors.Wrapf(err, "could not get gid for root")
+		return errors.Wrapf(err, "could not get uid for dnsmasq")
 	}
-	gid, _ := strconv.Atoi(g.Gid)
-	err = os.Chown(pxeFile, uid, gid)
-	return errors.Wrap(err, "could not make dnsmasq own the pxe config file")
+	fmt.Println("chown", uid, pxeFile)
+	err = os.Chown(pxeFile, uid, -1)
+	if err != nil {
+		return errors.Wrap(err, "could not make dnsmasq own the pxe config file")
+	}
+
+	fmt.Println("created pxe config for", name)
+	return nil
 }
