@@ -3,9 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
-	"os/user"
 	"path/filepath"
-	"strconv"
 
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
@@ -69,20 +67,6 @@ func reimage(name string, complete bool) error {
 	err = os.Symlink(role, pxeFile)
 	if err != nil {
 		return errors.Wrapf(err, "could not create pxe config file %s pointing to %s", pxeFile, role)
-	}
-
-	u, err := user.Lookup("dnsmasq")
-	if err != nil {
-		return errors.Wrapf(err, "could not get uid for dnsmasq")
-	}
-	uid, err := strconv.Atoi(u.Uid)
-	if err != nil {
-		return errors.Wrapf(err, "could not get uid for dnsmasq")
-	}
-	fmt.Println("chown", uid, pxeFile)
-	err = os.Chown(pxeFile, uid, -1)
-	if err != nil {
-		return errors.Wrap(err, "could not make dnsmasq own the pxe config file")
 	}
 
 	fmt.Println("created pxe config for", name)
