@@ -47,11 +47,12 @@ func reimage(name string, complete bool) error {
 	pxeDir := "/var/ftpd/pxelinux.cfg"
 	pxeFile := filepath.Join(pxeDir, node.MACAddress)
 
+	err := os.Remove(pxeFile)
+	if !os.IsNotExist(err) {
+		return errors.Wrapf(err, "could not remove %q", pxeFile)
+	}
+
 	if complete {
-		err := os.Remove(pxeFile)
-		if !os.IsNotExist(err) {
-			return errors.Wrapf(err, "could not remove %q", pxeFile)
-		}
 		return nil
 	}
 
@@ -59,7 +60,7 @@ func reimage(name string, complete bool) error {
 	if node.Leader {
 		role = "leader"
 	}
-	err := os.Symlink(role, pxeFile)
+	err = os.Symlink(role, pxeFile)
 	if err != nil {
 		return errors.Wrapf(err, "could not create pxe config file %s pointing to %s", pxeFile, role)
 	}
