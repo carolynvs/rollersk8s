@@ -1,5 +1,8 @@
 #!/bin/sh
-set -eou pipefail
+set -xeou pipefail
+
+# Install k8s
+./k8s.sh leader
 
 # Create the initial cluster
 # Specify a CIDR to make flannel happy
