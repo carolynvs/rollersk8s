@@ -1,8 +1,9 @@
-#!/bin/sh
+#!/bin/bash
 set -xeou pipefail
 
 # Install k8s
-./k8s.sh leader
+curl -O tftp://raspberrypi/k8s.sh
+bash k8s.sh leader
 
 # Create the initial cluster
 # Specify a CIDR to make flannel happy
