@@ -1,3 +1,6 @@
 .DS_Store
 ponyboot/var/ftpd/preseed-user.cfg
 ponyboot/var/ftpd/post-install.sh
+rollerk8s
+join
+advertise
