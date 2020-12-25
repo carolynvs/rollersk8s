@@ -1,0 +1,11 @@
+[Unit]
+Description=Advertise Kubernetes Cluster
+
+[Service]
+Type=simple
+Restart=always
+User=root
+ExecStart=/advertise
+
+[Install]
+WantedBy=multi-user.target

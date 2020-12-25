@@ -13,6 +13,7 @@ import (
 )
 
 func main() {
+	fmt.Println("joining the pony cluster...")
 	r, err := http.Get("http://rainbowdash:8081/join")
 	if err != nil {
 		log.Fatal(err)
@@ -34,9 +35,11 @@ func main() {
 	}
 
 	join := exec.Command("kubeadm", "join", "--token", result.Token, "--discovery-token-ca-cert-hash", result.Hash, "rainbowdash:6443")
-	fmt.Println(strings.Join(join.Args, " "))
+	fmt.Println("running", strings.Join(join.Args, " "))
 	err = join.Run()
 	if err != nil {
 		log.Fatal(errors.Wrap(err, "cluster join failed"))
 	}
+
+	fmt.Println("successfully joined the cluster!")
 }

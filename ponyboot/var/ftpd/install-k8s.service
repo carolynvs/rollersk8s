@@ -3,6 +3,7 @@ Description=Install Kubernetes
 
 [Service]
 Type=oneshot
+User=root
 ExecStart=/install-k8s.sh
 
 [Install]

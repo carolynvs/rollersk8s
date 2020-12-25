@@ -26,5 +26,12 @@ kubectl apply -f /root/manifests/kube-flannel.yml
 echo "allowing workloads to run on master..."
 kubectl taint node `hostname` node-role.kubernetes.io/master-
 
-echo "new cluster setup complete, waiting for nodes to join"
+echo "new cluster setup complete"
 curl -O tftp://raspberrypi/advertise && chmod o+x advertise
+curl -o /etc/systemd/system/advertise-k8s.service tftp://raspberrypi/advertise-k8s.service
+systemctl start advertise-k8s
+systemctl enable advertise-k8s
+echo "listening for nodes to join"
+
+# Only run the installation once
+systemctl disable install-k8s
