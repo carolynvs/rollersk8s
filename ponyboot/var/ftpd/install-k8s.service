@@ -1,0 +1,9 @@
+[Unit]
+Description=Install Kubernetes
+
+[Service]
+Type=oneshot
+ExecStart=/install-k8s.sh
+
+[Install]
+WantedBy=multi-user.target
