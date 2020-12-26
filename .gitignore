@@ -1,6 +1,10 @@
 .DS_Store
 ponyboot/var/ftpd/preseed-user.cfg
 ponyboot/var/ftpd/post-install.sh
-rollerk8s
+ponyboot/var/ftpd/debian-installer/
+ponyboot/var/ftpd/ldlinux.c32
+ponyboot/var/ftpd/pxelinux.0
+ponyboot/var/ftpd/version.info
+reimage
 join
 advertise
