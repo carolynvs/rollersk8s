@@ -4,7 +4,10 @@ Description=Install Kubernetes
 [Service]
 Type=oneshot
 User=root
+Group=root
 ExecStart=/install-k8s.sh
 
 [Install]
+Wants=network-online.target
+After=network.target network-online.target
 WantedBy=multi-user.target
