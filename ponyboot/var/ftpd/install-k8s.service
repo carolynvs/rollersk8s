@@ -5,9 +5,8 @@ Description=Install Kubernetes
 Type=oneshot
 User=root
 Group=root
+ExecStartPre=/bin/sh -c 'until ping -c1 google.com; do sleep 1; done;'
 ExecStart=/install-k8s.sh
 
 [Install]
-Wants=network-online.target
-After=network.target network-online.target
 WantedBy=multi-user.target
