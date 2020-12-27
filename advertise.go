@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -13,11 +14,13 @@ import (
 )
 
 func main() {
+	fmt.Println("Waiting for nodes to join")
 	http.HandleFunc("/join", handle)
 	log.Fatal(http.ListenAndServe("0.0.0.0:8081", nil))
 }
 
 func handle(w http.ResponseWriter, r *http.Request) {
+	fmt.Printf("Join request from %s received\n", r.RemoteAddr)
 	var buf bytes.Buffer
 	cmd := exec.Command("kubeadm", "token", "create", "--print-join-command")
 	cmd.Stdout = &buf
@@ -50,6 +53,7 @@ func handle(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	fmt.Printf("Returned join token to %s\n", r.RemoteAddr)
 	w.WriteHeader(200)
 	w.Write(b)
 }
