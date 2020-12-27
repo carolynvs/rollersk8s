@@ -48,7 +48,9 @@ mkdir -p /etc/systemd/system/docker.service.d
 systemctl daemon-reload
 systemctl restart docker
 systemctl enable docker
-systemctl start docker
+
+# Wait for docker
+until docker ps; do sleep 1; done
 
 # Install kubernetes
 apt-get install -y kubelet=$K8S_VERSION kubeadm=$K8S_VERSION kubectl=$K8S_VERSION
