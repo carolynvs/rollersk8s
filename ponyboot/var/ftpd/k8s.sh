@@ -14,6 +14,14 @@ fi
 
 echo "configuring as a Kubernetes $TYPE"
 
+# Prevent docker from starting during apt-get install
+apt-get install -y policyrcd-script-zg2
+echo <<EOF >> /usr/local/sbin/policy-donotstart
+#!/bin/sh
+exit 101
+EOF
+chmod 755 /usr/local/sbin/policy-donotstart
+
 echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 
 # Add the Docker repository
@@ -32,7 +40,8 @@ EOF
 apt-get update
 
 # Install Docker
-apt-get install -y docker-ce=$DOCKER_VERSION docker-ce-cli=$DOCKER_VERSION containerd.io=$CONTAINERD_VERSION
+apt-get install -y containerd.io=$CONTAINERD_VERSION
+POLICYRCD=/usr/local/sbin/policy-donotstart apt-get install -y docker-ce=$DOCKER_VERSION docker-ce-cli=$DOCKER_VERSION
 mkdir -p /etc/docker
 cat <<EOF >> /etc/docker/daemon.json
 {
@@ -44,13 +53,14 @@ cat <<EOF >> /etc/docker/daemon.json
   "storage-driver": "overlay2"
 }
 EOF
-mkdir -p /etc/systemd/system/docker.service.d
-systemctl daemon-reload
-systemctl restart docker
 systemctl enable docker
+systemctl daemon-reload
+systemctl start docker.socket
+sleep 1
+systemctl start docker
 
 # Wait for docker
-until docker ps; do sleep 1; done
+timeout 60s bash -c 'until docker ps; do sleep 1; done'
 
 # Install kubernetes
 apt-get install -y kubelet=$K8S_VERSION kubeadm=$K8S_VERSION kubectl=$K8S_VERSION

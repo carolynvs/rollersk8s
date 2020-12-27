@@ -5,7 +5,7 @@ Description=Install Kubernetes
 Type=oneshot
 User=root
 Group=root
-ExecStartPre=/bin/sh -c 'until ping -c1 google.com; do sleep 2; done; echo wait a bit...; sleep 30; echo done waiting!'
+ExecStartPre=/bin/sh -c 'until ping -c1 google.com; do sleep 2; done;'
 ExecStart=/install-k8s.sh
 
 [Install]
