@@ -14,15 +14,16 @@ fi
 
 echo "configuring as a Kubernetes $TYPE"
 
+# Avoid warnings about not being in a tty session
+echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
+
 # Prevent docker from starting during apt-get install
 apt-get install -y policyrcd-script-zg2
-echo <<EOF >> /usr/local/sbin/policy-donotstart
+cat <<EOF >> /usr/local/sbin/policy-donotstart
 #!/bin/sh
 exit 101
 EOF
 chmod 755 /usr/local/sbin/policy-donotstart
-
-echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 
 # Add the Docker repository
 curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
@@ -57,7 +58,7 @@ systemctl enable docker
 systemctl daemon-reload
 systemctl start docker.socket
 sleep 1
-systemctl start docker
+systemctl start docker || true
 
 # Wait for docker
 timeout 60s bash -c 'until docker ps; do sleep 1; done'
