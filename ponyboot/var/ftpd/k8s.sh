@@ -1,5 +1,5 @@
 #!/bin/sh
-set -eou pipefail
+set -xeou pipefail
 
 K8S_VERSION="1.20.1-00"
 DOCKER_VERSION="5:20.10.1~3-0~debian-buster"
@@ -46,13 +46,7 @@ cat <<EOF >> /etc/docker/daemon.json
 EOF
 mkdir -p /etc/systemd/system/docker.service.d
 systemctl daemon-reload
-
-# Silly hack, ensure the socket is ready otherwise I see docker starting before socket
-systemctl start docker.socket
-sleep 1
-
-# Okay NOW start docker? I give up...
-systemctl start docker
+systemctl restart docker
 systemctl enable docker
 
 # Wait for docker
