@@ -46,7 +46,13 @@ cat <<EOF >> /etc/docker/daemon.json
 EOF
 mkdir -p /etc/systemd/system/docker.service.d
 systemctl daemon-reload
-systemctl restart docker
+
+# Silly hack, ensure the socket is ready otherwise I see docker starting before socket
+systemctl start docker.socket
+sleep 1
+
+# Okay NOW start docker? I give up...
+systemctl start docker
 systemctl enable docker
 
 # Wait for docker
